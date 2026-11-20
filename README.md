@@ -14,6 +14,7 @@ BITRE publishes *International Airline Activity* as one Excel file per month, an
 | `download_sources.py` | Downloads any monthly files listed in the manifest that are missing locally |
 | `sql/create_tables.sql` | MySQL 8.0+ `CREATE TABLE` statements for the data sheets in the combined workbook (filter `row_type = 'detail'` before summing) |
 | `sql/insert_data.sql` | `INSERT` statements with all the data (8,202 rows), generated from the combined workbook by `export_sql.py` |
+| `load_mysql.py` | Reads the workbook and inserts it straight into MySQL with Python (creates the tables if asked) |
 | `export_sql.py` | Writes `sql/insert_data.sql`; run automatically at the end of `build_yearly.py` |
 
 The workbooks open in Excel 2016 or later (including Excel 2021). They contain plain values and standard charts, with no formulas.
@@ -74,6 +75,21 @@ python build_yearly.py
 To add a new month, append `YYYY-MM <link>` to `source_monthly/manifest.txt`, then run both scripts.
 
 ## Load into MySQL
+
+**With Python (reads the workbook and inserts it directly):**
+
+```bash
+pip install -r requirements.txt
+python load_mysql.py --create            # creates database airline_activity + tables if missing, then loads
+python load_mysql.py                     # reload into existing tables
+python load_mysql.py --host <host> --user <user> --database <name>
+```
+
+The password is read from `MYSQL_PASSWORD` or asked for at the prompt. Host, port, user and database can also come from `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER` and `MYSQL_DATABASE`. Each run empties and reloads the tables in one transaction, so a failed run leaves the previous data in place. Afterwards it checks the row counts and the latest year's passenger total. `--dry-run` reads and checks the workbook without connecting.
+
+Both methods were tested on a MySQL server (Homebrew MySQL 26.10) and load identical data.
+
+**Without Python (plain SQL files):**
 
 ```bash
 mysql -u <user> -p < sql/create_tables.sql   # creates database airline_activity and 7 empty tables
