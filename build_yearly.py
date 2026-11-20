@@ -763,6 +763,10 @@ def main():
     hl.monthly_sheet(wb, cx)
     wb.save(os.path.join(OUT, "International_airline_activity_yearly_ALL.xlsx"))
 
+    # MySQL data file (sql/insert_data.sql), kept in step with the workbook
+    import export_sql
+    export_sql.main()
+
     print("Months per year:", {y: len(m) for y, m in sorted(months.items())})
     print("Header warnings:", WARN or "none")
     print(f"Unparseable cells: {len(UNPARSED)}", sorted(set(UNPARSED))[:20])

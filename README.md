@@ -13,6 +13,8 @@ BITRE publishes *International Airline Activity* as one Excel file per month, an
 | `highlights.py` | Builds the highlight sheets and charts |
 | `download_sources.py` | Downloads any monthly files listed in the manifest that are missing locally |
 | `sql/create_tables.sql` | MySQL 8.0+ `CREATE TABLE` statements for the data sheets in the combined workbook (filter `row_type = 'detail'` before summing) |
+| `sql/insert_data.sql` | `INSERT` statements with all the data (8,202 rows), generated from the combined workbook by `export_sql.py` |
+| `export_sql.py` | Writes `sql/insert_data.sql`; run automatically at the end of `build_yearly.py` |
 
 The workbooks open in Excel 2016 or later (including Excel 2021). They contain plain values and standard charts, with no formulas.
 
@@ -70,6 +72,23 @@ python build_yearly.py
 ```
 
 To add a new month, append `YYYY-MM <link>` to `source_monthly/manifest.txt`, then run both scripts.
+
+## Load into MySQL
+
+```bash
+mysql -u <user> -p < sql/create_tables.sql   # creates database airline_activity and 7 empty tables
+mysql -u <user> -p < sql/insert_data.sql     # loads the data (re-runnable: empties each table first)
+```
+
+Tables 1–3 and 5 also hold subtotal and total rows, so filter `row_type = 'detail'` before summing:
+
+```sql
+SELECT year, operator, SUM(total_passengers) AS passengers
+FROM t1_traffic_by_operator
+WHERE row_type = 'detail'
+GROUP BY year, operator
+ORDER BY year, passengers DESC;
+```
 
 ## Licence
 
