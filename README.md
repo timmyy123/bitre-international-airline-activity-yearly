@@ -70,6 +70,11 @@ python build_yearly.py
 
 To add a new month, append `YYYY-MM <link>` to `source_monthly/manifest.txt`, then run both scripts.
 
+## Licence
+
+The code (`build_yearly.py`, `highlights.py`, `download_sources.py`) is released under the [MIT licence](LICENSE).
+The MIT licence does **not** cover the data: the BITRE files in `source_monthly/`, and the figures in `output/` that are derived from them, fall under BITRE's terms below.
+
 ## Source and attribution
 
 Data source: Bureau of Infrastructure and Transport Research Economics (BITRE), *International Airline Activity — monthly publications*, https://www.bitre.gov.au/resource/aviation/international-airline-activity-monthly-publications. © Commonwealth of Australia.
