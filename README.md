@@ -12,6 +12,7 @@ BITRE publishes *International Airline Activity* as one Excel file per month, an
 | `build_yearly.py` | Reads the monthly files, checks them and writes everything in `output/` |
 | `highlights.py` | Builds the highlight sheets and charts |
 | `download_sources.py` | Downloads any monthly files listed in the manifest that are missing locally |
+| `sql/create_tables.sql` | MySQL 8.0+ `CREATE TABLE` statements for the data sheets in the combined workbook (filter `row_type = 'detail'` before summing) |
 
 The workbooks open in Excel 2016 or later (including Excel 2021). They contain plain values and standard charts, with no formulas.
 
