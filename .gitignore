@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.DS_Store
+~$*
+.venv/
+venv/
+# BITRE links "December 2024" to a different publication; kept locally only, not used
+source_monthly/*.bak
